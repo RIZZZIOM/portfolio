@@ -493,9 +493,27 @@
       gsap.to("#clockHourBg", { rotation: -90, ease: "none", scrollTrigger: clockScrollConfig });
     }
 
-    /* Skills: list rows slide in, orbit graphic pops in as one piece */
+    /* Skills: list rows slide in */
     revealGroup(".skills-list li", { x: -20, y: 0, stagger: 0.06 });
-    revealEach(".skills-orbit", { scale: 0.85, y: 0 });
+
+    /* Skills: a light "scan line" sweeps across each row as it enters
+       view — reads as a HUD/target-lock scan tying into the operator-
+       console theme, rather than pure decoration. Scroll-triggered (not
+       hover-driven), so it works identically on touch devices. */
+    var skillScans = gsap.utils.toArray(".skill-scan");
+    if (skillScans.length) {
+      gsap.to(skillScans, {
+        xPercent: 350,
+        stagger: 0.06,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".skills-list",
+          start: "top 85%",
+          toggleActions: "play reverse play reverse"
+        }
+      });
+    }
   }
 
   function runTypewriter() {
